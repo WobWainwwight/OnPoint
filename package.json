@@ -1,0 +1,23 @@
+{
+  "name": "onpoint",
+  "version": "1.0.0",
+  "description": "An online local music magazine where the articles are written by the readers",
+  "main": "createDB.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WobWainwwight/OnPoint.git"
+  },
+  "author": "Rob Wainwright",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WobWainwwight/OnPoint/issues"
+  },
+  "homepage": "https://github.com/WobWainwwight/OnPoint#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "mysql": "^2.16.0"
+  }
+}
