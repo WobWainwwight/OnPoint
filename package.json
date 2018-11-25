@@ -4,6 +4,7 @@
   "description": "An online local music magazine where the articles are written by the readers",
   "main": "createDB.js",
   "scripts": {
+    "start": "index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,6 +19,11 @@
   "homepage": "https://github.com/WobWainwwight/OnPoint#readme",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
-    "mysql": "^2.16.0"
-  }
+    "mysql": "^2.16.0",
+    "parcel-bundler": "^1.10.3",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
+  },
+  "devDependencies": {},
+  "keywords": []
 }
