@@ -111,4 +111,8 @@ connection.query("DESCRIBE Writers",function(error,results){
 connection.query("SELECT * FROM Writers",function(error,results){
     if(error) throw error;
     console.log(results);
+
+    
 })
+
+connection.end();
