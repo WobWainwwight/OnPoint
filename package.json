@@ -1,10 +1,9 @@
 {
   "name": "onpoint",
   "version": "1.0.0",
-  "description": "An online local music magazine where the articles are written by the readers",
-  "main": "index.html",
+  "description": "Online Mag",
+  "main": "index.js",
   "scripts": {
-    "start": "index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,16 +17,10 @@
   },
   "homepage": "https://github.com/WobWainwwight/OnPoint#readme",
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
-    "components": "^0.1.0",
-    "history": "^4.7.2",
-    "mysql": "^2.16.0",
-    "parcel-bundler": "^1.10.3",
+    "express": "^4.16.4",
+    "node": "^11.4.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-router": "^4.3.1",
-    "react-router-dom": "^4.3.1"
-  },
-  "devDependencies": {},
-  "keywords": []
+    "react-images-upload": "^1.2.3"
+  }
 }
