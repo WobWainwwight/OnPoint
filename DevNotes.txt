@@ -1,0 +1,17 @@
+componentDidMount() is used for getting external data like from dbs
+
+added the main css back in
+
+issue- style is not loading - issue wasn't resolved, have to use import "<path to css file>" 
+Not necessarily a bad thing
+
+working on image upload for article creation, React first, then backend
+will give good idea of how backend works
+
+Lots of different backend to use... Will be using node.js/express decision made, get on with it
+
+Left article creation for now to have a go at login, will be easier to learn backend this way
+
+With fetch(), post requests take in two paramaters, a url and an object that you're posting
+
+Almost there

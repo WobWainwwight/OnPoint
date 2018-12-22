@@ -7,6 +7,7 @@ import {
 import "./css/main.css"
 
 import ArticleCreation from "./ArticleCreation"
+import LoginPage from "./Login"
 
 // Onpoint will always have the header and the footer
 // So app will always render the header and footer components
@@ -38,6 +39,7 @@ export default class App extends Component {
           <Header/>
           <p>{this.state.data}</p>
           <Route path='/create-article' component={ArticleCreation}/>
+          <Route path='/login' component={LoginPage}/>
         </div>
       </Router>
     );
