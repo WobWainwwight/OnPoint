@@ -15,3 +15,27 @@ Left article creation for now to have a go at login, will be easier to learn bac
 With fetch(), post requests take in two paramaters, a url and an object that you're posting
 
 Almost there
+
+22/12/18 fucken smashed the whole POSTing palava, didn't use express body-parser for PARSING the res' BODY
+
+NOW definitely worked out how to get stuff from DB
+
+23/12/18 - Gonna work out how to SECURELY login using sanitisation and validation
+
+Notes from OWASP on avoiding SQL injection:
+1. Use paramaterized queries => "SELECT ? FROM ? WHERE ?" [a,b,c]
+2. Stored Procedures - storing queries in the DB or summat
+3. Validating input, converting input to more secure forms like booleans
+4. LAST RESORT - Escaping all user input
+
+HOW IT SHOULD work
+
+1. Client sends over username and password
+2. Validate/secure username, then query to find if there are matches
+    a. if match is invalid - RETURN 'No username found'
+    b. match valid - continue
+3. Encrypt entered password using bcrypt and compare to hash password in the db
+    a. if password doesn't match - return, try new password
+    b. else - Allow in
+
+need to write express middleware

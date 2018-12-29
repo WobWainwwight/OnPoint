@@ -28,7 +28,7 @@ connection.query("CREATE TABLE Writers (" +
     "FirstName varchar(20) not null, "+
     "LastName varchar(25) not null, " +
     "Email varchar(40) not null, " +
-    "Password varchar(20) not null, " +
+    "Password varchar(255) not null, " +
     "Bio mediumtext," +
     "JoinDate datetime default current_timestamp not null," + 
     "ArticleCount tinyint not null default (0), " +
@@ -74,7 +74,7 @@ connection.query("CREATE TABLE Admins (" +
     "FirstName varchar(20) not null,"+
     "LastName varchar(25) not null, " +
     "Email varchar(40) not null, " +
-    "Password varchar (20) not null, " +
+    "Password varchar (255) not null, " +
     "primary key (AdminID))",function(error,results){
         if(error) throw error;
         console.log("Tags table Created");
@@ -89,9 +89,10 @@ connection.query("CREATE TRIGGER incr_article_count " +
     console.log(results);
 })
 // Adding me for testing
+// i've put in the hashed password
 connection.query("INSERT INTO Writers (" +
     "FirstName,LastName,Email,Password) "+
-    "VALUES ('Rob','Wainwright','RWainwright37@gmail.com','sausage')",function(error,results){
+    "VALUES ('Rob','Wainwright','RWainwright37@gmail.com','$2a$10$6RXdDe9gvpoiVwDOxRl6Cu/R6tJYpPzKqlfLtBXIb1cNM88O8iyDS')",function(error,results){
     if(error) throw error;
     console.log(results);
 })

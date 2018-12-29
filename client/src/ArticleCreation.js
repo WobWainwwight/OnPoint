@@ -57,8 +57,6 @@ export default class ArticleCreation extends React.Component{
 }
 
 function Preview (props){
-  
-  
   return (
     <div>
       <h1>Preview</h1>

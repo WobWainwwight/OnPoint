@@ -4,19 +4,21 @@ export default class LoginPage extends React.Component{
   constructor(props){
     super(props)
     this.state = {
-      enteredUsername: '',
+      enteredEmail: '',
       enteredPassword: '',
       submitted: false,
-      message: 'Enter your username and password',
+      accepted: false,
+      message: 'Enter your Email and password',
     }
-    this.handleUsername = this.handleUsername.bind(this)
+    this.handleEmail = this.handleEmail.bind(this)
     this.handlePassword = this.handlePassword.bind(this)
     this.validate = this.validate.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.submitToAPI = this.submitToAPI.bind(this)
   }
-  handleUsername(value){
+  handleEmail(value){
     this.setState({
-      enteredUsername: value
+      enteredEmail: value
     })
   }
   handlePassword(value){
@@ -24,35 +26,57 @@ export default class LoginPage extends React.Component{
       enteredPassword: value
     })
   }
+  // calls API after quick validation, changes message and accepted depending
+  // on result from API call
   handleSubmit(){
     if (this.validate() !== true){
       this.setState({
-        message: "Try again"
+        message: 'Try agin'
       })   
     }
     else {
       console.log('State',this.state)
-      const username = this.state.enteredUsername
+      const email = this.state.enteredEmail
       const password = this.state.enteredPassword
-      console.log(username,password)
-      fetch('/login', {
-        method: 'POST',
-        headers: {
-          'Content-type':'application/json'
-        },
-        //some problem here
-        body: JSON.stringify({
-          password: password,
-          username: username,
+      const data = {
+        email: email,
+        password: password,
+      }
+      this.submitToAPI(data)
+      .then(res => {
+        this.setState({ 
+          message: res.message,
+          accepted: res.accepted
         })
       })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
+      .catch(err => {
+        console.log(err)
+        this.setState({
+          message: 'There was a problem, try again later'
+        })
+      })
     }
+  }
+  // POSTs email and password to API
+  submitToAPI = async (uAndE) => {
+    const response = await fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Accept':'application/json, text/plain, */*',
+        'Content-type':'application/json'
+      },
+      body: JSON.stringify(uAndE)
+    })
+    const body = await response.json()
+    // 200 is the http code signalling the request is successful
+    if (response.status !== 200){
+      throw Error(body.messsage)
+    } 
+    return body
   }
   
   validate(){
-    if( this.state.enteredUsername.length > 0 && this.state.enteredPassword.length > 0 ){
+    if( this.state.enteredEmail.length > 0 && this.state.enteredPassword.length > 0 ){
       return true
     } else { return false }
   }
@@ -61,9 +85,9 @@ export default class LoginPage extends React.Component{
       <div>
         <input 
           type="text" 
-          placeholder="Username" 
-          value={this.state.enteredUsername} 
-          onChange={(e) => this.handleUsername(e.target.value)}
+          placeholder="Email" 
+          value={this.state.enteredEmail} 
+          onChange={(e) => this.handleEmail(e.target.value)}
         />
         <input 
           type="password" 
