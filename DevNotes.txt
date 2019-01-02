@@ -39,3 +39,17 @@ HOW IT SHOULD work
     b. else - Allow in
 
 need to write express middleware
+
+USER SESSION
+
+once a user logs in successfully, a user session needs to be created
+
+Gonna go STATELESS - Server gives client a signed token that contains session info JWT
+
+JWT - JSON Web Token -
+  a token passed from server to client 
+  in the form header.payload.signature
+
+  header is info saying that it is a JWT and the type of encryption
+  payload is the info that you want to give 
+  signature is te

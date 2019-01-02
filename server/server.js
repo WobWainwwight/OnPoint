@@ -1,6 +1,9 @@
 var express = require('express')
 var app = express()
 
+var helmet = require('helmet')
+app.use(helmet())
+
 var bodyParser = require('body-parser')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({  extended: true }));
@@ -26,7 +29,7 @@ app.get('/backend', (req,res) => {
 })
 
 async function getPassword(email, cb){
-  const query = "SELECT Password FROM Writers WHERE Email = ?"
+  const query = "SELECT * FROM Writers WHERE Email = ?"
   await connection.query(query,[email],(err,results) => {
     if(err){
       return cb(error)
@@ -36,7 +39,7 @@ async function getPassword(email, cb){
   })
 }
 
-async function validateLogin(req, res, next) {
+function validateLogin(req, res, next) {
   console.log("Validating login")
   // if email was invalid, no need to check DB
   if(res.body.accepted === false){
