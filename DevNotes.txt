@@ -53,3 +53,6 @@ JWT - JSON Web Token -
   header is info saying that it is a JWT and the type of encryption
   payload is the info that you want to give 
   signature is te
+
+  Handled redirect to home after login, now need to change what is show in app
+  depending on whether the user has authenticated

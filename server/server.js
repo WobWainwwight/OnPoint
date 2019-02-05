@@ -49,7 +49,13 @@ function validateLogin(req, res, next) {
     // calling get password and then using a callback function to
     // use bcrypt, making sure that the user password matches the hashed password
     getPassword(req.body.email, (err,result) =>{
-      if (err) throw err
+      if (err){
+        req.body = {
+          "message": "Technical issue, please try again later",
+          "accepted": false,
+        }
+        throw err
+      } 
       if(bcrypt.compareSync(req.body.password,result)){
         res.body = { 
           "message": "Password and Email correct",

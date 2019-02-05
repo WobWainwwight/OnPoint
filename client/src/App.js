@@ -6,40 +6,40 @@ import {
 } from "react-router-dom"
 import "./css/main.css"
 
+import ProtectedRoute from './ProtectedRoute'
 import ArticleCreation from "./ArticleCreation"
 import LoginPage from "./Login"
+import Home from "./Home"
 
 // Onpoint will always have the header and the footer
 // So app will always render the header and footer components
 // The body will be change depending on what the user is doing
 export default class App extends Component {
-  state = {
-    data: null
+  constructor(props){
+    super(props)
+    this.state = {
+      isAuthenticated: false,
+    }
+    this.authenticate = this.authenticate.bind(this)
   }
-  componentDidMount(){
-    this.callBackendAPI()
-      .then(res => this.setState({data: res.express }))
-      .catch(err => console.log(err))
-  }
-  callBackendAPI = async () => {
-    const response = await fetch('/backend')
-    const body = await response.json()
-    
-    // 200 is the http code signalling the request is successful
-    if (response.status !== 200){
-      throw Error(body.messsage)
-    } 
-
-    return body
+  // sets whether the user is authorised or not
+  authenticate(trueOrFalse){
+    this.setState({
+      isAuthenticated: trueOrFalse,
+    })
   }
   render() {
     return (
       <Router>
         <div>
-          <Header/>
-          <p>{this.state.data}</p>
-          <Route path='/create-article' component={ArticleCreation}/>
-          <Route path='/login' component={LoginPage}/>
+          <Header isAuthenticated = {this.state.isAuthenticated}/>
+          <Route exact path='/' component={Home} />
+          <ProtectedRoute path='/create-article' component={ArticleCreation} isAuthenticated={this.state.isAuthenticated}/>
+          <Route path='/login' 
+            render={(routeProps) => (
+              <LoginPage {...routeProps} authenticate={this.authenticate} isAuthenticated={this.state.isAuthenticated}/>
+            )}
+          />
         </div>
       </Router>
     );
@@ -47,6 +47,7 @@ export default class App extends Component {
 }
 // The header, is always there, contains links to login and menu
 function Header (props) {
+  
   return(
       <header>
           <ul id = "headerLinks">

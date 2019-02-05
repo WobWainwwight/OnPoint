@@ -1,4 +1,5 @@
 import React from "react"
+import { Redirect } from 'react-router-dom'
 
 export default class LoginPage extends React.Component{
   constructor(props){
@@ -9,6 +10,7 @@ export default class LoginPage extends React.Component{
       submitted: false,
       accepted: false,
       message: 'Enter your Email and password',
+      isAuthenticated: this.props.isAuthenticated,
     }
     this.handleEmail = this.handleEmail.bind(this)
     this.handlePassword = this.handlePassword.bind(this)
@@ -48,6 +50,16 @@ export default class LoginPage extends React.Component{
           message: res.message,
           accepted: res.accepted
         })
+        if(this.state.accepted === true){
+          this.props.authenticate(true)
+          // timeout so that the user can see that login was successful
+          setTimeout(() => { 
+            // calling setState re renders the component causing a redirect since isAuthenticated is now true
+            this.setState({
+              isAuthenticated: this.props.isAuthenticated
+            })
+          }, 2000)
+        }
       })
       .catch(err => {
         console.log(err)
@@ -80,7 +92,14 @@ export default class LoginPage extends React.Component{
       return true
     } else { return false }
   }
+
+  
   render(){
+    if(this.state.isAuthenticated){
+      return(
+        <Redirect to='/'/>
+      )
+    }
     return(
       <div>
         <input 
