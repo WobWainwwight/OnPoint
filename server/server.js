@@ -19,14 +19,12 @@ connection.connect()
 
 var emailValidator = require('email-validator')
 var bcrypt = require('bcrypt-nodejs')
+var jwt = require('jsonwebtoken')
+const JWT_SECRET = "sandwiches"
 
 var port = process.env.PORT || 5000 
 
 app.listen(port, () => console.log('Connected at ', port))
-
-app.get('/backend', (req,res) => { 
-  res.send({ express: 'express connected'})
-})
 
 async function getPassword(email, cb){
   const query = "SELECT * FROM Writers WHERE Email = ?"
@@ -35,7 +33,7 @@ async function getPassword(email, cb){
       return cb(error)
     }
     console.log("result", results[0].Password)
-    cb(undefined,results[0].Password)
+    cb(undefined,results[0])
   })
 }
 
@@ -56,11 +54,25 @@ function validateLogin(req, res, next) {
         }
         throw err
       } 
-      if(bcrypt.compareSync(req.body.password,result)){
+      if(bcrypt.compareSync(req.body.password,result.Password)){
+        console.log("resultID",result.WriterID)
+        var payload = {
+          id: result.WriterID,
+          firstname: result.FirstName,
+          lastname: result.LastName,
+          email: result.Email,
+          bio: result.Bio,
+          articleCount: result.ArticleCount
+        }
+        // create JWT
+        var token = jwt.sign(payload, JWT_SECRET)
+
         res.body = { 
-          "message": "Password and Email correct",
+          "message": "Welcome " + result.FirstName,
           "accepted": true,
-        }      
+          "token": token,
+        }
+        console.log("Result",result)      
         console.log("Login accepted")
       }
       else{

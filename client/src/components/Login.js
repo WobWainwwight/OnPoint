@@ -1,5 +1,6 @@
 import React from "react"
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
+var jwt = require('jsonwebtoken')
 
 export default class LoginPage extends React.Component{
   constructor(props){
@@ -51,9 +52,14 @@ export default class LoginPage extends React.Component{
           accepted: res.accepted
         })
         if(this.state.accepted === true){
-          this.props.authenticate(true)
+          // put JWT in cookie
+          document.cookie = "token=" + res.token
+          console.log(res.token)
+          var decoded = jwt.verify(res.token,'sandwiches')
+          console.log(decoded)    
           // timeout so that the user can see that login was successful
-          setTimeout(() => { 
+          setTimeout(() => {
+            this.props.authenticate(true) 
             // calling setState re renders the component causing a redirect since isAuthenticated is now true
             this.setState({
               isAuthenticated: this.props.isAuthenticated
@@ -102,6 +108,7 @@ export default class LoginPage extends React.Component{
     }
     return(
       <div>
+        <h2>Login</h2>
         <input 
           type="text" 
           placeholder="Email" 
@@ -115,6 +122,9 @@ export default class LoginPage extends React.Component{
         />
         <button onClick={() => this.handleSubmit()}>Submit</button>
         <h3>{this.state.message}</h3>
+        
+        <Link to='/signup'>Sign Up!</Link>
+      
       </div>
     )  
   }

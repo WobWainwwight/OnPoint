@@ -7,9 +7,10 @@ import {
 import "./css/main.css"
 
 import ProtectedRoute from './ProtectedRoute'
-import ArticleCreation from "./ArticleCreation"
-import LoginPage from "./Login"
-import Home from "./Home"
+import ArticleCreation from "./components/ArticleCreation"
+import LoginPage from "./components/Login"
+import Home from "./components/Home"
+import Signup from "./components/Signup"
 
 // Onpoint will always have the header and the footer
 // So app will always render the header and footer components
@@ -35,6 +36,7 @@ export default class App extends Component {
           <Header isAuthenticated = {this.state.isAuthenticated}/>
           <Route exact path='/' component={Home} />
           <ProtectedRoute path='/create-article' component={ArticleCreation} isAuthenticated={this.state.isAuthenticated}/>
+          <Route path='/signup' component={Signup}/>
           <Route path='/login' 
             render={(routeProps) => (
               <LoginPage {...routeProps} authenticate={this.authenticate} isAuthenticated={this.state.isAuthenticated}/>
@@ -47,17 +49,30 @@ export default class App extends Component {
 }
 // The header, is always there, contains links to login and menu
 function Header (props) {
-  
-  return(
+  if(props.isAuthenticated === true){
+    return(
       <header>
           <ul id = "headerLinks">
               <li><Link to='/menu'><h1>Menu</h1></Link></li>
               <li><Link to ='/'><h1>OnPoint</h1></Link></li>
               <li><Link to='/create-article'><h1>Create Article</h1></Link></li>
-              <li><Link to='/login'><h1>Login</h1></Link></li>
+              
           </ul>
       </header>        
-  )
+    )
+  }
+  else{
+    return(
+      <header>
+          <ul id = "headerLinks">
+              <li><Link to='/menu'><h1>Menu</h1></Link></li>
+              <li><Link to ='/'><h1>OnPoint</h1></Link></li>
+              <li><Link to='/login'><h1>Login</h1></Link></li>
+          </ul>
+      </header>   
+    )
+  }
+  
 }
 
 

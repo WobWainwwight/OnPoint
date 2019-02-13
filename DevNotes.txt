@@ -56,3 +56,7 @@ JWT - JSON Web Token -
 
   Handled redirect to home after login, now need to change what is show in app
   depending on whether the user has authenticated
+
+  Gonna now try and create JWT on signin with users info which can be stored as a cookie
+
+  JWT is stored in cookie, now to create a sign up page
