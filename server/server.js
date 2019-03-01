@@ -55,24 +55,26 @@ function validateLogin(req, res, next) {
         throw err
       } 
       if(bcrypt.compareSync(req.body.password,result.Password)){
-        console.log("resultID",result.WriterID)
         var payload = {
           id: result.WriterID,
+        }
+        // create JWT
+        var token = jwt.sign(payload, JWT_SECRET)
+        console.log(token)
+        const userInfo = {
           firstname: result.FirstName,
           lastname: result.LastName,
           email: result.Email,
           bio: result.Bio,
           articleCount: result.ArticleCount
         }
-        // create JWT
-        var token = jwt.sign(payload, JWT_SECRET)
-
         res.body = { 
           "message": "Welcome " + result.FirstName,
           "accepted": true,
-          "token": token,
+          "OPtoken": token,
+          "OPuserInfo": userInfo,
         }
-        console.log("Result",result)      
+        console.log(res.body)
         console.log("Login accepted")
       }
       else{
@@ -99,13 +101,84 @@ function validateEmail(req,res,next){
   }
   else{
     console.log("Email valid")
-    res.body = { "accepted": true }
+    res.body = {
+      "accepted": true,
+      "message": "Email Valid"
+    }
+    console.log("Resbody 1",res.body)
     next()
+  }
+  
+}
+
+function addUserToDB(req, res, next){
+  console.log("Reached addUserToDB")
+  // res.body.accepted will be false if email was invalid
+  // in that case we skip this method and go straight to sending the res
+  if(res.body.accepted === false){
+    next()
+  }
+  else{
+     //first check whether the user already exists
+    const checkQuery = "SELECT * FROM Writers WHERE Email = ?"
+    connection.query(checkQuery,[req.body.email], (err,result) => {
+      if(err){
+        res.body = {
+          "accepted": false,
+          "message" : 'There was a problem please try again later',
+        }
+        console.log("resbody 2",res.body)
+        throw err
+      }
+      // if no record exists add new writer
+      else if (result.length === 0){
+        //add new Writer
+        const insertQuery = "INSERT INTO Writers (FirstName,LastName,Email,Password) VALUES (?,?,?,?)"
+        // encrypt password
+        const encrypted = bcrypt.hashSync(req.body.password)
+        connection.query(insertQuery,[req.body.firstname,req.body.lastname,req.body.email,encrypted],(err,result) => {
+          if(err){
+            res.body = {
+              "accepted": false,
+              "message" : 'Sorry there was a technical problem please try again later',
+            }
+            console.log("resbody 3",res.body)
+            throw err
+          }
+          else{
+            console.log("Added " + req.body.email + " to Writers")
+            res.body.message = welcome
+            res.body= {
+              "accepted": true,
+              "message": 'Welcome to OnPoint'
+            }
+            console.log("resbody 4",res.body)
+            next()
+          }
+        })
+      }
+      else {
+        console.log("result",result)
+        res.body = {
+          "accepted": false,
+          "message" : 'There is already an account for this email, please login',
+        }
+        console.log("resbody 5",res.body)
+        next()
+      }
+    })
   }
 }
 
+
+
 app.post('/login',[validateEmail, validateLogin],(req,res) => {
   res.json(res.body)   
+})
+
+app.post('/signup',[validateEmail, addUserToDB],(req,res) =>{
+  console.log("RESBOdy out",res.body)
+  res.json(res.body)
 })
 
   

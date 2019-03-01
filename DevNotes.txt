@@ -60,3 +60,33 @@ JWT - JSON Web Token -
   Gonna now try and create JWT on signin with users info which can be stored as a cookie
 
   JWT is stored in cookie, now to create a sign up page
+
+  Splitting up signup page and signup form is proving difficult, probably just easier to put it all in one
+
+    USing a stored procedure to add new writers and check whether the writer already exists first, proving to be a pain
+    
+    email a doesnt exist so it should be added 
+
+     IF EXISTS(SELECT * from Wr where Email = a) is TRUE ADD user
+     IF EXISTS(empty set) is TRUE ADD user
+     IF EXISTS(SELECT * from Wr where Email = a) is TRUE ADD user
+     IF EXISTS(SELECT * from Wr where Email = a) is TRUE ADD user
+
+     Doing it the dumb way is easier
+
+     Not that easy
+     Have a bug where it won't change the res.body
+
+    Seemed to have solved the bug, now need to add session once signed up
+
+    Decided that to hold user sesssion, will store user info in local storage and
+    JWT containing user info in cookie. The idea is that when a user leaves the
+    browser the local storage will be gone but the cookie will remain.
+    TODO:    On entering the website the server checks whether the cookie exists
+            if it does then decode, if it looks correct then authenticate and restore
+            the info into local storage (what if out of date??)
+
+            The user info is now stored as a stringified JSON object in local storage
+            Will sort the changes to authentication once I've finished signup
+
+
