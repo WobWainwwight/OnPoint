@@ -89,4 +89,9 @@ JWT - JSON Web Token -
             The user info is now stored as a stringified JSON object in local storage
             Will sort the changes to authentication once I've finished signup
 
+            Look up url parameters
+
+    Today I've added the start of a profile page including options to change bio
+    
+
 

@@ -1,6 +1,5 @@
 import React from "react"
 import { Redirect, Link } from 'react-router-dom'
-import JWT from 'jsonwebtoken'
 
 export default class LoginPage extends React.Component{
   constructor(props){
@@ -53,23 +52,21 @@ export default class LoginPage extends React.Component{
           accepted: res.accepted
         })
         if(this.state.accepted === true){
-          
-          // put JWT in cookie
+          // put JWT in cookie, first deleting an already existing one
+          document.cookie = "OPtoken; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
           document.cookie = "OPtoken=" + res.OPtoken
-          var decoded = JWT.verify(res.OPtoken,'sandwiches')
-          console.log("decoded toke",decoded)
           // store info in local storage
           console.log("res",res)
           console.log("USERINGo",res.OPuserInfo)
           var userInfoString = JSON.stringify(res.OPuserInfo)
-          window.localStorage.setItem('OPuserInfo',userInfoString)
+          localStorage.setItem('OPuserInfo',userInfoString)
           setTimeout(() => {
             this.props.authenticate(true) 
             // calling setState re renders the component causing a redirect since isAuthenticated is now true
             this.setState({
               isAuthenticated: this.props.isAuthenticated
-            })
-          }, 2000)
+            })// reset to time once development is done
+          }, 0)
         }
       })
       .catch(err => {

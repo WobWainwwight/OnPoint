@@ -32,8 +32,12 @@ async function getPassword(email, cb){
     if(err){
       return cb(error)
     }
-    console.log("result", results[0].Password)
-    cb(undefined,results[0])
+    else if (results.length === 0){
+      cb(undefined,undefined)
+    }
+    else{
+      cb(undefined,results[0])
+    }
   })
 }
 
@@ -48,13 +52,22 @@ function validateLogin(req, res, next) {
     // use bcrypt, making sure that the user password matches the hashed password
     getPassword(req.body.email, (err,result) =>{
       if (err){
-        req.body = {
+        res.body = {
           "message": "Technical issue, please try again later",
           "accepted": false,
         }
+        next()
         throw err
+      }
+      else if(!result){
+        res.body = {
+          "message": "No record of that email",
+          "accepted": false,
+        }
+        console.log("No result",res.body)
+        next()
       } 
-      if(bcrypt.compareSync(req.body.password,result.Password)){
+      else if(bcrypt.compareSync(req.body.password,result.Password)){
         var payload = {
           id: result.WriterID,
         }
@@ -62,6 +75,7 @@ function validateLogin(req, res, next) {
         var token = jwt.sign(payload, JWT_SECRET)
         console.log(token)
         const userInfo = {
+          id: result.WriterID,
           firstname: result.FirstName,
           lastname: result.LastName,
           email: result.Email,
@@ -147,10 +161,9 @@ function addUserToDB(req, res, next){
           }
           else{
             console.log("Added " + req.body.email + " to Writers")
-            res.body.message = welcome
             res.body= {
               "accepted": true,
-              "message": 'Welcome to OnPoint'
+              "message": 'Welcome to OnPoint, please login with your details'
             }
             console.log("resbody 4",res.body)
             next()
@@ -178,6 +191,26 @@ app.post('/login',[validateEmail, validateLogin],(req,res) => {
 
 app.post('/signup',[validateEmail, addUserToDB],(req,res) =>{
   console.log("RESBOdy out",res.body)
+  res.json(res.body)
+})
+
+app.post('/updateBio',(req,res) => {
+  const updateBioQuery = "UPDATE Writers SET Bio = ? WHERE WriterID = ?"
+  connection.query(updateBioQuery,[req.body.bio,req.body.id],(err,result) =>{
+    if(err){
+      res.body = {
+        message: "Sorry there is a technical difficulty and we couldn't chage your bio, please try again later.",
+        accepted: false,
+      }
+      throw err
+    }
+    else{
+      res.body = {
+        message: "Bio was successfully updated",
+        accepted: true,
+      }
+    }
+  })
   res.json(res.body)
 })
 

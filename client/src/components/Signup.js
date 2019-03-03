@@ -1,4 +1,5 @@
 import React from "react"
+import { Redirect } from 'react-router-dom'
 
 export default class Signup extends React.Component{
   constructor(props){
@@ -38,8 +39,14 @@ export default class Signup extends React.Component{
         console.log(res)
         this.setState({
           message: res.message,
-          accepted: res.accepted,
         })
+        //Once they've succesfully signed up they're redirected to the login page
+        setTimeout(() => {
+          // calling setState re renders with accepted = true so that they are redirected
+          this.setState({
+            accepted: res.accepted,
+          })
+        }, 2000)
       })
     }
     else{
@@ -74,6 +81,11 @@ export default class Signup extends React.Component{
     })
   }
   render(){
+    if(this.state.accepted === true){
+      return(
+        <Redirect to='/login'/>
+      )
+    }
     return(
       <div>
         <h1>Sign Up</h1>
