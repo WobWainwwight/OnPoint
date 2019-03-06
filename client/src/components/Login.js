@@ -44,6 +44,7 @@ export default class LoginPage extends React.Component{
         email: email,
         password: password,
       }
+      console.log("Here",data)
       this.submitToAPI(data)
       .then(res => {
         console.log("res",res)

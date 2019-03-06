@@ -5,7 +5,7 @@ export default ({ component: Component, isAuthenticated, ...rest }) =>{
   return(
     <Route {...rest} render={(props) =>(
       isAuthenticated === true
-      ? <Component {...props}/>
+      ? <Component {...props} {...rest}/>
       : <Redirect to='/login'/>
     )}/>
   )

@@ -93,5 +93,11 @@ JWT - JSON Web Token -
 
     Today I've added the start of a profile page including options to change bio
     
+    JSON bug is that id doesn't have quotes around it
+    Actually, it may be something to do with the response from the server
+    Thinks its because of the asynchronous nature of express
+    Ended up being a mix up between getLocal storage and JSON.parse ...
+
+    Starting on article creation now
 
 

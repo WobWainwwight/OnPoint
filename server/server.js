@@ -24,7 +24,7 @@ const JWT_SECRET = "sandwiches"
 
 var port = process.env.PORT || 5000 
 
-app.listen(port, () => console.log('Connected at ', port))
+app.listen(port, () => console.log('Connected! at ', port))
 
 async function getPassword(email, cb){
   const query = "SELECT * FROM Writers WHERE Email = ?"
@@ -108,7 +108,7 @@ function validateEmail(req,res,next){
   if(emailValidator.validate(req.body.email) !== true){
     console.log("emailInvalid")
     res.body = { 
-      "message": 'Email was not valid',
+      "message": "Email was not valid",
       "accepted": false,
     }
     next()
@@ -183,8 +183,6 @@ function addUserToDB(req, res, next){
   }
 }
 
-
-
 app.post('/login',[validateEmail, validateLogin],(req,res) => {
   res.json(res.body)   
 })
@@ -194,27 +192,26 @@ app.post('/signup',[validateEmail, addUserToDB],(req,res) =>{
   res.json(res.body)
 })
 
-app.post('/updateBio',(req,res) => {
+app.post('/updateBio', async (req,res) => {
   const updateBioQuery = "UPDATE Writers SET Bio = ? WHERE WriterID = ?"
-  connection.query(updateBioQuery,[req.body.bio,req.body.id],(err,result) =>{
+  connection.query(updateBioQuery,[req.body.bio,req.body.id],(err) => {
     if(err){
       res.body = {
-        message: "Sorry there is a technical difficulty and we couldn't chage your bio, please try again later.",
-        accepted: false,
+        "message": "There was a problem, your bio wasn't updated, please try again later",
+        "accepted": false,
       }
       throw err
     }
     else{
       res.body = {
-        message: "Bio was successfully updated",
-        accepted: true,
+        "message": "Bio was successfully updated",
+        "accepted": true,
       }
     }
+    res.json(res.body)
   })
-  res.json(res.body)
 })
 
   
-
 
 

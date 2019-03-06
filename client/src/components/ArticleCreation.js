@@ -1,5 +1,5 @@
 import React from "react"
-import ImageUploader from "react-images-upload"
+//import ImageUploader from "react-images-upload"
 
 export default class ArticleCreation extends React.Component{
     // When the article creation component is created it 
@@ -8,7 +8,7 @@ export default class ArticleCreation extends React.Component{
         super(props)
         this.state = {
             selectedTitle: '',
-            selectedHeaderImage: [],
+            inputContent: [],
         }
 
         this.handleTitleChange = this.handleTitleChange.bind(this)
@@ -20,10 +20,19 @@ export default class ArticleCreation extends React.Component{
         selectedTitle: value 
       })
     }
-    handleHeaderImageChange(value){
+    handleAddParagraph(){
+      // append object to inputContent
+      // object should include type (paragraph/img), the order it is displayed in and the content
+      var order = this.state.inputContent.length
+      var newParagraph = {
+        order: order,
+        type: "text",
+        content: ''
+      }
+      var newIC = this.state.inputContent.push(newParagraph)
       this.setState({
-        selectedHeaderImage: this.state.selectedHeaderImage.concat(value),
-    });
+        inputContent: newIC
+      })
     }
     // Swapped below out for image uploader class
     //<input type='file' onChange={(e) => this.handleHeaderImageChange(e.target.value)}/>
@@ -32,36 +41,21 @@ export default class ArticleCreation extends React.Component{
         <div>
           <input 
             type='text'
-            placeholder='enter title'
+            placeholder='Enter title'
             maxLength='100'
             onChange={(e) => this.handleTitleChange(e.target.value)}
           />
-          <ImageUploader
-                withIcon={true}
-                buttonText='Choose images'
-                onChange={this.handleHeaderImageChange}
-                imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                maxFileSize={5242880}
-          />   
-          <br/>
-          <p>Upload header Image:</p>
-                      
-          <hr/>
-          <Preview 
-            currTitle={this.state.selectedTitle}
-            currHeaderImg={this.state.selectedHeaderImage}
-          />
+          <InputContent content={this.state.content}/>
+          <button onChange={() => this.handleAddParagraph()}>Add Paragraph</button> 
         </div>
       )
     }
 }
 
-function Preview (props){
+const InputContent = (props) => {
   return (
     <div>
-      <h1>Preview</h1>
-        <h2>title : {props.currTitle}</h2>
-        <h2>Header Image</h2><img src={props.currHeaderImg} alt="Upload a header"/>
+      {this.props.content}
     </div>
   )
 }

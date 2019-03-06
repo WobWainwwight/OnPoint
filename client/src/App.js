@@ -28,13 +28,24 @@ export default class App extends Component {
   
   // sets whether the user is authorised or not
   authenticate(trueOrFalse){
-    const userInfo = JSON.parse(localStorage.getItem("OPuserInfo"))
-    console.log("Userinfo",userInfo)
-    this.setState({
-      isAuthenticated: trueOrFalse,
-      userInfo: userInfo
-    })
-    console.log("STATE u info",this.state.userInfo)
+    if(trueOrFalse === true){
+      const userInfo = JSON.parse(localStorage.getItem("OPuserInfo"))
+      console.log("Userinfo",userInfo)
+      this.setState({
+        isAuthenticated: trueOrFalse,
+        userInfo: userInfo
+      })
+      console.log("STATE u info",this.state.userInfo)
+    }
+    else{
+      // delete cookie and local storage
+      document.cookie = "OPtoken; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+      localStorage.removeItem('OPuserInfo')
+      this.setState({
+        isAuthenticated: false, 
+      })
+    }
+    
   }
   render() {
     return (
@@ -42,19 +53,28 @@ export default class App extends Component {
         <div>
           <Header isAuthenticated = {this.state.isAuthenticated} userInfo = {this.state.userInfo}/>
           <Route exact path='/' component={Home} />
-          <ProtectedRoute path='/create-article' component={ArticleCreation} isAuthenticated={this.state.isAuthenticated}/>
+          <ProtectedRoute path='/create-article/:userId' component={ArticleCreation} isAuthenticated={this.state.isAuthenticated}/>
           <Route path='/signup' component={Signup}/>
           <Route path='/login' 
             render={(routeProps) => (
               <LoginPage {...routeProps} authenticate={this.authenticate} isAuthenticated={this.state.isAuthenticated}/>
             )}
           />
-          <ProtectedRoute path='/profile/:userId' component={ProfilePage} isAuthenticated={this.state.isAuthenticated}/>
+          <ProtectedRoute path='/profile/:userId' component={ProfilePage}
+            isAuthenticated={this.state.isAuthenticated} 
+            authenticate={this.authenticate}
+          />
+          
         </div>
       </Router>
     );
   }
 }
+/*<ProtectedRoute path='/profile/:userId' 
+            render={(routeProps) => (
+              <ProfilePage {...routeProps} authenticate={this.authenticate} isAuthenticated={this.state.isAuthenticated}/>
+            )}
+          />*/
 // The header, is always there, contains links to login and menu
 function Header (props) {
   if(props.isAuthenticated === true){
