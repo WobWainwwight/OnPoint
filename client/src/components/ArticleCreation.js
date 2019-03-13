@@ -15,7 +15,8 @@ export default class ArticleCreation extends React.Component{
         this.handleTitleChange = this.handleTitleChange.bind(this)
         this.handleAddParagraph = this.handleAddParagraph.bind(this)
         this.handleChangeParagraph = this.handleChangeParagraph.bind(this)
-
+        this.handleAddImg = this.handleAddImg.bind(this)
+        this.handleHeaderImg = this.handleHeaderImg.bind(this)
     }
     handleTitleChange(value) {
       this.setState({
@@ -49,7 +50,6 @@ export default class ArticleCreation extends React.Component{
         })
       }
     }
-     
     handleChangeParagraph(order,e){
       let newIC = this.state.inputContent
       newIC[order].content = e.target.value
@@ -57,6 +57,12 @@ export default class ArticleCreation extends React.Component{
         inputContent: newIC 
       })
       console.log("here " + order + e.target.value )
+    }
+    handleAddImg(){
+
+    }
+    handleHeaderImg(){
+      
     }
     // Swapped below out for image uploader class
     //<input type='file' onChange={(e) => this.handleHeaderImageChange(e.target.value)}/>
@@ -69,8 +75,16 @@ export default class ArticleCreation extends React.Component{
             maxLength='100'
             onChange={(e) => this.handleTitleChange(e.target.value)}
           />
+          <label for="headImage">Add head image</label>
+          <input
+            type='file'
+            id='headImage'
+            placeholder='Add head image'
+            accept="image/png, image/jpeg"
+          />
           <InputContent contentArr={this.state.inputContent} handleChangeParagraph={this.handleChangeParagraph}/>
           <button onClick={() => this.handleAddParagraph()}>Add Paragraph</button>
+          <button onClick={() => this.handleAddImg()}>Add Image</button>
           <p>{this.state.message}</p>
         </div>
       )

@@ -100,4 +100,10 @@ JWT - JSON Web Token -
 
     Starting on article creation now
 
+  Decided to try deployment to try and work out how all that works
+  https://facebook.github.io/create-react-app/docs/deployment <= useful resource - serving apps with client side routing
+
+  Fuck it, heroku is much easier, will just have to transfer the domain name
+  
+
 
