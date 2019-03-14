@@ -3,6 +3,9 @@ var app = express()
 var path = require('path')
 
 app.use(express.static(path.join(__dirname,'../client/build')))
+app.get('/*',(req,res) => {
+  res.sendFile(path.join(__dirnmae,'../client/build','index.html'))
+})
 
 var helmet = require('helmet')
 app.use(helmet())
