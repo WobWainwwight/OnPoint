@@ -1,6 +1,7 @@
 var express = require('express')
 var app = express()
 var path = require('path')
+require('dotenv').config()
 
 app.use(express.static(path.join(__dirname,'../client/build')))
 app.get('/*',(req,res) => {
@@ -26,7 +27,24 @@ connection.connect()
 var emailValidator = require('email-validator')
 var bcrypt = require('bcrypt-nodejs')
 var jwt = require('jsonwebtoken')
-const JWT_SECRET = "sandwiches"
+
+// for image uploading via cloudinary
+const cloudinary = require('cloudinary')
+const cors = require('cors')
+const { CLIENT_ORIGIN } = require('./config')
+const formData = require('express-form-data')
+app.use(formData.parse())
+
+
+cloudinary.config({ 
+  cloud_name: process.env.CLOUD_NAME, 
+  api_key: process.env.API_KEY, 
+  api_secret: process.env.API_SECRET
+})
+  
+app.use(cors({ 
+  origin: CLIENT_ORIGIN 
+})) 
 
 var port = process.env.PORT || 5000 
 
@@ -78,7 +96,7 @@ function validateLogin(req, res, next) {
           id: result.WriterID,
         }
         // create JWT
-        var token = jwt.sign(payload, JWT_SECRET)
+        var token = jwt.sign(payload, process.env.JWT_SECRET)
         console.log(token)
         const userInfo = {
           id: result.WriterID,
@@ -213,9 +231,45 @@ app.post('/updateBio', async (req,res) => {
         "message": "Bio was successfully updated",
         "accepted": true,
       }
+      console.log("Bio for user " + req.body.id + " changed")
     }
     res.json(res.body)
   })
+})
+
+app.post('/upload-img', async (req,res) => {
+  console.log("Add image request",req)
+  const imgName = "wid" + req.body.writerId + "aid" + req.body.articleId + "t" + req.body.type
+  const storedIn = "/shouterImg/" + req.body.writerId + "/" + req.body.articleId + "/"
+  
+  // upload image to cloudinary
+  try {
+    console.log("entered try catch")
+    cloudinary.v2.uploader.upload(req.files.img.path, {
+      folder: storedIn,
+      public_id: imgName
+    }, (err,result) => {
+      if (err) throw err
+      else {
+        console.log("succes")
+        // sending back the location so the image can be rendered
+        const location = storedIn + imgName
+        res.body = {
+          "accepted": true,
+          "location": location,
+          "oldName": req.files.img.name
+        }
+        res.json(res.body)
+      }
+    })
+  }
+  catch(e){
+    console.log(error)
+    res.body = {
+      "accepted": false
+    }
+    res.json(res.body)
+  }
 })
 
   

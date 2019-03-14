@@ -1,15 +1,22 @@
 import React from "react"
-//import ImageUploader from "react-images-upload"
 
 export default class ArticleCreation extends React.Component{
     // When the article creation component is created it 
     // has a state of nothing
     constructor(props){
         super(props)
+        // get user info
+        const userInfo = JSON.parse(localStorage.getItem("OPuserInfo"))
+        var articleID = userInfo.articleCount + 1
+        console.log("UserInfo AC",userInfo)
+        const writerID = userInfo.id 
         this.state = {
             selectedTitle: '',
             inputContent: [],
             message: '',
+            hImgAdded: false,
+            articleID: articleID,
+            writerID: writerID
         }
 
         this.handleTitleChange = this.handleTitleChange.bind(this)
@@ -17,6 +24,7 @@ export default class ArticleCreation extends React.Component{
         this.handleChangeParagraph = this.handleChangeParagraph.bind(this)
         this.handleAddImg = this.handleAddImg.bind(this)
         this.handleHeaderImg = this.handleHeaderImg.bind(this)
+        this.imgToAPI = this.imgToAPI.bind(this)
     }
     handleTitleChange(value) {
       this.setState({
@@ -58,14 +66,44 @@ export default class ArticleCreation extends React.Component{
       })
       console.log("here " + order + e.target.value )
     }
-    handleAddImg(){
-
-    }
-    handleHeaderImg(){
+    handleAddImg(e){
       
     }
-    // Swapped below out for image uploader class
-    //<input type='file' onChange={(e) => this.handleHeaderImageChange(e.target.value)}/>
+    handleHeaderImg(e){
+      console.log("ArticleID",this.state.articleID)
+      // make an API call sending the image file, articleID and WriterID
+      const toSend = new FormData()
+      toSend.append('img',e.target.files[0])
+      toSend.append('type','header')
+      toSend.append('writerId',this.state.writerID)
+      toSend.append('articleId',this.state.articleID) 
+      this.imgToAPI(toSend)
+      .then((res) => {
+        console.log(res)
+        if(res.accepted === true){
+          // work out src
+          const re = /.jpg|.jpeg|.png/
+          console.log(res.oldName)
+          const fileType = re.exec(res.oldName)
+          console.log(fileType)
+          this.setState({hImgAdded: true})
+        }
+        else{this.setState({hImgAdded: false})}
+      })
+    }
+    imgToAPI = async (data) => {
+      const response = await fetch('/upload-img',{
+        method: 'POST',
+        body: data
+      })
+      const body = await response.json()
+      // 200 is the http code signalling the request is successful
+      if (response.status !== 200){
+        throw Error(body.messsage)
+      } 
+      return body
+  }
+
     render(){
       return (
         <div>
@@ -75,22 +113,49 @@ export default class ArticleCreation extends React.Component{
             maxLength='100'
             onChange={(e) => this.handleTitleChange(e.target.value)}
           />
-          <label for="headImage">Add head image</label>
-          <input
-            type='file'
-            id='headImage'
-            placeholder='Add head image'
-            accept="image/png, image/jpeg"
-          />
+          <UploadHeaderImg handleHeaderImg={this.handleHeaderImg} status={this.state.hImgAdded} writerID={this.state.writerID} articleID={this.state.articleID}/>
           <InputContent contentArr={this.state.inputContent} handleChangeParagraph={this.handleChangeParagraph}/>
           <button onClick={() => this.handleAddParagraph()}>Add Paragraph</button>
-          <button onClick={() => this.handleAddImg()}>Add Image</button>
+          <input
+            type='file'
+            id='image'
+            placeholder='Add image'
+            accept="image/png, image/jpeg"
+            onChange={(e) => this.handleAddImg(e)}
+          />
           <p>{this.state.message}</p>
         </div>
       )
     }
 }
 
+const UploadHeaderImg = (props) => {
+  var label
+  if(props.status === false){
+    label = "Add header image"
+    return(
+      <div>
+        <input
+          type='file'
+          id='headImage'
+          placeholder={label}
+          accept="image/png, image/jpeg"
+          onChange={(e) => props.handleHeaderImg(e)}
+        />
+      </div>
+    )
+  }
+  else {
+    label = "Change header"
+    const imgName = "wid" + props.writerID + "aid" + props.articleID + "theader" 
+    const imgURL = "https://res.cloudinary.com/wob/image/fetch/shouterImg/" + props.writerID + "/" + props.articleID + "/" + imgName
+    return(
+      <div>
+        <img src={imgURL + ".jpg"} alt={imgURL}/>
+      </div>
+    )
+  }
+}
 const InputContent = (props) => {
   const content = props.contentArr
   const textAreaList = content.map((element) =>

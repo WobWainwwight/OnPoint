@@ -1,15 +1,5 @@
-var arr = []
-var obj = {
-  id:1,
-  carrot:5
-}
-var obj2 = {
-  id:2,
-  carrot:3
-}
+const re = /.jpg$|.jpeg$|.png$/
+//const re = new RegExp(".jpg$|.jpeg$|.png$")
+var result = re.exec("gandhi.png")
 
-arr.push(obj)
-arr.push(obj2)
-
-var x = arr[1].id
-console.log(x)
+console.log(result[0])

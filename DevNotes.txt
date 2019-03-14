@@ -105,5 +105,9 @@ JWT - JSON Web Token -
 
   Fuck it, heroku is much easier, will just have to transfer the domain name
   
+  Heroku wasnt much easier
+  Going back to article creation
+
+  Image uploading to cloudinary with relative url is now working
 
 
