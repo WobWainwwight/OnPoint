@@ -248,16 +248,14 @@ app.post('/upload-img', async (req,res) => {
     cloudinary.v2.uploader.upload(req.files.img.path, {
       folder: storedIn,
       public_id: imgName
-    }, (err,result) => {
+    }, (err,cloudinary) => {
       if (err) throw err
       else {
         console.log("succes")
-        // sending back the location so the image can be rendered
-        const location = storedIn + imgName
+        // send back the result so I can show the image
         res.body = {
+          cloudinary,
           "accepted": true,
-          "location": location,
-          "oldName": req.files.img.name
         }
         res.json(res.body)
       }
