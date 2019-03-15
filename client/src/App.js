@@ -9,7 +9,7 @@ import "./css/main.css"
 import ProtectedRoute from './ProtectedRoute'
 import ArticleCreation from "./components/ArticleCreation"
 import LoginPage from "./components/Login"
-import Home from "./components/Home"
+import Feed from "./components/Feed"
 import Signup from "./components/Signup"
 import ProfilePage from "./components/ProfilePage"
 
@@ -52,7 +52,7 @@ export default class App extends Component {
       <Router>
         <div>
           <Header isAuthenticated = {this.state.isAuthenticated} userInfo = {this.state.userInfo}/>
-          <Route exact path='/' component={Home} />
+          <Route exact path='/' component={Feed} />
           <ProtectedRoute path='/create-article/:userId' component={ArticleCreation} isAuthenticated={this.state.isAuthenticated}/>
           <Route path='/signup' component={Signup}/>
           <Route path='/login' 
@@ -70,11 +70,7 @@ export default class App extends Component {
     );
   }
 }
-/*<ProtectedRoute path='/profile/:userId' 
-            render={(routeProps) => (
-              <ProfilePage {...routeProps} authenticate={this.authenticate} isAuthenticated={this.state.isAuthenticated}/>
-            )}
-          />*/
+
 // The header, is always there, contains links to login and menu
 function Header (props) {
   if(props.isAuthenticated === true){

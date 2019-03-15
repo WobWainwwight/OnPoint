@@ -270,6 +270,31 @@ app.post('/upload-img', async (req,res) => {
   }
 })
 
+app.post('/add-article', (req,res) => {
+  console.log("Adding article", req.body)
+  //New articles in DB should have writerid, content, headerimg url, title
+  res.body= {"madeit":"madeit"}
+  const contentString = JSON.stringify(req.body.content)
+  const insertArticleQuery = "INSERT INTO Articles (WriterID, Title, Content, HeadImage) VALUES (?,?,?,?)"
+  connection.query(insertArticleQuery,[req.body.writer_id,req.body.title,contentString,req.body.header_url],(err,result) => {
+    if(err){
+      res.body={accepted:false}
+      throw err
+    }
+    else{
+      res.body={accepted:true}
+    }
+    res.json(res.body)
+  })
+})
+
+app.get('/get-feed',(req,res) =>{
+  res.body= {
+    "feed": "feed"
+  }
+  
+})
+
   
 
 

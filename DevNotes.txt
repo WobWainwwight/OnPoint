@@ -110,4 +110,13 @@ JWT - JSON Web Token -
 
   Image uploading to cloudinary with relative url is now working
 
+  New articles in DB should have writerid, content, headerimg url, title
+
+  words by test undefined
+
+  ProfilePage handle logout TODO
+
+  componentDidMount() : 
+
+
 
