@@ -16,6 +16,8 @@ export default class ProfilePage extends React.Component {
     // delete cookie and local storage
     // set auth to false
     // redirect?
+    localStorage.clear()
+    document.cookie = 'OPtoken =; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
     this.props.authenticate(false)
     console.log("props",this.props)
   }

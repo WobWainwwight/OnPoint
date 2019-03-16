@@ -114,7 +114,7 @@ JWT - JSON Web Token -
 
   words by test undefined
 
-  ProfilePage handle logout TODO
+  ProfilePage handle logout 
 
   componentDidMount() : 
 

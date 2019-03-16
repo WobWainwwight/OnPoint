@@ -5,7 +5,7 @@ require('dotenv').config()
 
 app.use(express.static(path.join(__dirname,'../client/build')))
 app.get('/*',(req,res) => {
-  res.sendFile(path.join(__dirnmae,'../client/build','index.html'))
+  res.sendFile(path.join(__dirname,'../client/build','index.html'))
 })
 
 var helmet = require('helmet')
@@ -288,10 +288,22 @@ app.post('/add-article', (req,res) => {
   })
 })
 
-app.get('/get-feed',(req,res) =>{
-  res.body= {
-    "feed": "feed"
-  }
+app.post('/get-feed',(req,res) =>{
+  console.log("get feed")
+  const getFeed = "SELECT * FROM ARTICLES ORDER BY ArticleID DESC"
+  connection.query(getFeed,(err,result) => {
+    if(err){
+      res.body = {
+        "accepted": false
+      }
+    }
+    else{
+      res.body = {
+        result
+      }
+    }
+    res.json(res.body)
+  })
   
 })
 

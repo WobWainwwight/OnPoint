@@ -1,22 +1,35 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
-export default class Home extends Component{
+export default class Feed extends Component{
   constructor(props){
     super(props)
-
     this.state = {
-      welcome: "WELCOME"
+      filters: '',
+      feed: []
     }
+    this.fetchFeed = this.fetchFeed.bind(this)
+    
   }
   componentDidMount(){
-    fetchArticles()
-    const response = await fetch('/signup',{
+    // TODO: add filters so that they can be sent and a different feed is returned
+    this.fetchFeed(this.state)
+    .then((result) => {
+      const usableArr = Array.from(result.result)
+      this.setState({
+        feed: usableArr
+      },() => console.log(this.state))
+    })
+  }
+  // makes a get request for the articles
+  fetchFeed = async (request) => {
+    const response = await fetch('/get-feed', {
       method: 'POST',
       headers: {
         'Accept':'application/json, text/plain, */*',
         'Content-type':'application/json'
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(request)
     })
     const body = await response.json()
     // 200 is the http code signalling the request is successful
@@ -25,15 +38,28 @@ export default class Home extends Component{
     } 
     return body
   }
-  // makes a get request for the articles
-  fetchArticles = async (request) => {
-
-  }
+  
   render(){
+    const feedArr = this.state.feed
+    console.log(feedArr)
+    const feedRender = feedArr.map((articleInfo) => 
+      <ArticleHead key={articleInfo.ArticleID} {...articleInfo} />
+    )
     return(
       <div>
-        <h1>{this.state.welcome}</h1>
+        {feedRender}
       </div>
     )
   }
+}
+
+const ArticleHead = (props) => {
+  // each article head will render the image and title, and
+  // it will be a link to the article page
+  return(
+    <div>
+      <img src={props.HeadImage} alt=''/>
+      <Link to={`/articles/${props.ArticleID}`}><h3>{props.Title}</h3></Link>
+    </div>
+  )
 }
