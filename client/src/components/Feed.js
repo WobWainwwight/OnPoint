@@ -6,9 +6,11 @@ export default class Feed extends Component{
     super(props)
     this.state = {
       filters: '',
-      feed: []
+      feed: [],
+      selectedArticle: [],
     }
     this.fetchFeed = this.fetchFeed.bind(this)
+    this.handleArticleClick = this.handleArticleClick.bind(this)
     
   }
   componentDidMount(){
@@ -39,11 +41,20 @@ export default class Feed extends Component{
     return body
   }
   
+  handleArticleClick(chosenArticle){
+    // change clicked to chosen article
+    console.log(chosenArticle)
+    /*this.setState({
+      selectedArticle: chosenArticle
+    })*/
+
+  }
+  
   render(){
     const feedArr = this.state.feed
     console.log(feedArr)
     const feedRender = feedArr.map((articleInfo) => 
-      <ArticleHead key={articleInfo.ArticleID} {...articleInfo} />
+      <ArticleHead key={articleInfo.ArticleID} {...articleInfo} click={this.handleArticleClick} />
     )
     return(
       <div>
@@ -51,15 +62,18 @@ export default class Feed extends Component{
       </div>
     )
   }
+    
 }
 
 const ArticleHead = (props) => {
   // each article head will render the image and title, and
   // it will be a link to the article page
+  console.log("AHEad props", props)
   return(
     <div>
       <img src={props.HeadImage} alt=''/>
-      <Link to={`/articles/${props.ArticleID}`}><h3>{props.Title}</h3></Link>
+      <Link to={`/article/${props.ArticleID}`}><h3>{props.Title}</h3></Link>
     </div>
   )
 }
+

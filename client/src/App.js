@@ -12,6 +12,7 @@ import LoginPage from "./components/Login"
 import Feed from "./components/Feed"
 import Signup from "./components/Signup"
 import ProfilePage from "./components/ProfilePage"
+import Article from "./components/ArticlePage"
 
 // Onpoint will always have the header and the footer
 // So app will always render the header and footer components
@@ -64,7 +65,10 @@ export default class App extends Component {
             isAuthenticated={this.state.isAuthenticated} 
             authenticate={this.authenticate}
           />
-          
+          <Route
+            path='/article/:articleId'
+            component={Article}
+          />
         </div>
       </Router>
     );
@@ -97,5 +101,6 @@ function Header (props) {
   }
   
 }
+
 
 

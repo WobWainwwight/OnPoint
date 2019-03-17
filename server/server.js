@@ -290,7 +290,8 @@ app.post('/add-article', (req,res) => {
 
 app.post('/get-feed',(req,res) =>{
   console.log("get feed")
-  const getFeed = "SELECT * FROM ARTICLES ORDER BY ArticleID DESC"
+  // return only the articleID, header image and title
+  const getFeed = "SELECT ArticleID, HeadImage, Title FROM Articles ORDER BY ArticleID DESC"
   connection.query(getFeed,(err,result) => {
     if(err){
       res.body = {
@@ -299,6 +300,7 @@ app.post('/get-feed',(req,res) =>{
     }
     else{
       res.body = {
+        "accepted": true,
         result
       }
     }
@@ -306,6 +308,45 @@ app.post('/get-feed',(req,res) =>{
   })
   
 })
+
+app.post('/get-article', (req,res,next) => {
+  console.log(req.body)
+  // first get 
+  const getArticleQuery = "SELECT * FROM Articles WHERE ArticleID = ?"
+  connection.query(getArticleQuery,[req.body.articleId], (err,result) => {
+    if(err){
+      res.body = {
+        "articleData": false
+      }
+      throw err
+    }
+    else{
+      res.body = {
+        "articleData": result[0]
+      }
+    }
+    next()
+  })
+  
+}, (req,res,next) => {
+  // get writer data
+  console.log(res.body.articleData.WriterID)
+  const getWriterDataQuery = "SELECT FirstName, LastName, Bio FROM Writers WHERE WriterID = ?"
+  console.log(res.body)
+  connection.query(getWriterDataQuery,[res.body.articleData.WriterID],(err,result) => {
+    if(err){
+      res.body.writerData = false
+      throw err
+    }
+    else{
+      res.body.writerData =result[0]
+    }
+    next()
+  })
+}, (req,res) => {
+  res.json(res.body)
+}
+)
 
   
 
