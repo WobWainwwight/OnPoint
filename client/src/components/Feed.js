@@ -10,17 +10,23 @@ export default class Feed extends Component{
       selectedArticle: [],
     }
     this.fetchFeed = this.fetchFeed.bind(this)
-    this.handleArticleClick = this.handleArticleClick.bind(this)
     
   }
   componentDidMount(){
     // TODO: add filters so that they can be sent and a different feed is returned
     this.fetchFeed(this.state)
     .then((result) => {
-      const usableArr = Array.from(result.result)
-      this.setState({
-        feed: usableArr
-      },() => console.log(this.state))
+      if(result.articleData !== false){
+        const usableArr = Array.from(result.result)
+        this.setState({
+          feed: usableArr
+        },() => console.log(this.state))
+      }
+      else{
+        this.setState({
+          feed: false,
+        })
+      }
     })
   }
   // makes a get request for the articles
@@ -41,37 +47,37 @@ export default class Feed extends Component{
     return body
   }
   
-  handleArticleClick(chosenArticle){
-    // change clicked to chosen article
-    console.log(chosenArticle)
-    /*this.setState({
-      selectedArticle: chosenArticle
-    })*/
-
-  }
-  
   render(){
-    const feedArr = this.state.feed
-    console.log(feedArr)
-    const feedRender = feedArr.map((articleInfo) => 
-      <ArticleHead key={articleInfo.ArticleID} {...articleInfo} click={this.handleArticleClick} />
-    )
-    return(
-      <div>
-        {feedRender}
-      </div>
-    )
+    if(this.state.feed !== false){
+      const feedArr = this.state.feed
+      // add a className to the first three elements
+      const feedRender = feedArr.map((articleInfo) => 
+        <ArticleHead key={articleInfo.ArticleID} {...articleInfo} click={this.handleArticleClick} />
+      )
+      console.log("feedrender",feedRender)
+      return(
+        <div className='feed'>
+          {feedRender}
+        </div>
+      )
+    }
+    else{
+      return(
+        <div>
+          Sorry, couldn't retrieve articles
+        </div>
+      )
+    }
   }
-    
 }
 
 const ArticleHead = (props) => {
   // each article head will render the image and title, and
   // it will be a link to the article page
   console.log("AHEad props", props)
+  const urlString = 'url(' + props.HeadImage + ')'
   return(
-    <div>
-      <img src={props.HeadImage} alt=''/>
+    <div style={{background: urlString}}>
       <Link to={`/article/${props.ArticleID}`}><h3>{props.Title}</h3></Link>
     </div>
   )

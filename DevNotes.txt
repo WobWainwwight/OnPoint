@@ -118,7 +118,8 @@ JWT - JSON Web Token -
 
   componentDidMount() : 
 
-  TODO: add handling if fetch feed isn't accepted
+  add handling if fetch feed isn't accepted
 
+  doing css now
 
 

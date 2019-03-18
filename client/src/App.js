@@ -51,9 +51,13 @@ export default class App extends Component {
   render() {
     return (
       <Router>
-        <div>
+        <div className="wrapper">
           <Header isAuthenticated = {this.state.isAuthenticated} userInfo = {this.state.userInfo}/>
-          <Route exact path='/' component={Feed} />
+          <Route exact path='/' 
+            render={(routeProps) =>(
+              <Feed {...routeProps} className='feed'/>
+            )} 
+          />
           <ProtectedRoute path='/create-article/:userId' component={ArticleCreation} isAuthenticated={this.state.isAuthenticated}/>
           <Route path='/signup' component={Signup}/>
           <Route path='/login' 
@@ -79,23 +83,24 @@ export default class App extends Component {
 function Header (props) {
   if(props.isAuthenticated === true){
     return(
-      <header>
-          <ul id = "headerLinks">
-              <li><Link to='/menu'><h1>Menu</h1></Link></li>
-              <li><Link to ='/'><h1>OnPoint</h1></Link></li>
-              <li><Link to={`/profile/${props.userInfo.id}`}><h1>{props.userInfo.firstname}</h1></Link></li>
-          </ul>
+      <header className='header'>
+        <ul>
+          <li><Link to ='/' style={{textDecoration:'none',color:'black'}}><h1>Shouter</h1></Link></li>
+          <li className='loginButton'><Link to={`/profile/${props.userInfo.id}`}>{props.userInfo.firstname}</Link></li>
+        </ul>
+        
       </header>        
     )
   }
   else{
     return(
-      <header>
-          <ul id = "headerLinks">
-              <li><Link to='/menu'><h1>Menu</h1></Link></li>
-              <li><Link to ='/'><h1>OnPoint</h1></Link></li>
-              <li><Link to='/login'><h1>Login</h1></Link></li>
-          </ul>
+      <header className='header'>
+        <div></div>
+        <ul>
+          <li><Link to ='/'style={{textDecoration:'none', color:'black'}}><h1>Shouter</h1></Link></li>
+          <li className='loginButton'><Link to='/login'>Login</Link></li>
+        </ul>
+        
       </header>   
     )
   }
