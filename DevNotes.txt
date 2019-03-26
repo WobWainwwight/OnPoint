@@ -122,4 +122,4 @@ JWT - JSON Web Token -
 
   doing css now
 
-
+  TODO: Add limit to the amount that can be added to an article

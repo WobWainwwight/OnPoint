@@ -12,12 +12,16 @@
 html {
   box-sizing: border-box;
   font-family: Verdana, Geneva, sans-serif;
-  color: var(--black)
+  color: var(--black);
+  max-width: 100%;
+  overflow-x: hidden;
 }
 body {
   margin: 0;
   background-color: var(--bg-colour);
   line-height: normal;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 .wrapper {
   display: grid;
@@ -44,6 +48,7 @@ body {
     font-size: 1.1rem;
     box-shadow: var(--shadow);
     border-radius: 15px;
+    padding-right: 2rem;
 }
 .loginButton a:hover {
   background: var(--black);
@@ -53,7 +58,61 @@ body {
 .feed {
   display: grid;
   grid-gap: 20px;
-  grid-template-columns: 1fr 1fr; 
+  grid-template-columns: repeat(3,1fr);
+  padding: 1rem 1.5rem; 
+}
+.articleHeads img {
+  box-shadow: var(--shadow);
+
+}
+.articleHeads a {
+  
+  height: 200px;
+  border-bottom: var(--acc-border);
+  background: #fbfbf8
+}
+
+
+.resize {
+  width: 400px;
+  height: auto;
+}
+
+@media (max-width: 1300px){
+  .feed {
+    grid-template-columns: repeat(2,1fr);
+  }
+  .resize {
+    width: 450px;
+    height:auto;
+  }
+
+}
+
+@media (max-width: 800px){
+  .feed {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: 1fr;
+    padding: 1rem 1.5rem; 
+  }
+  .resize {
+    width: 350px;
+    height:auto;
+  }
+  .header ul {
+    padding-left: 1rem;
+    font-size: 0.8rem;
+    grid-template-columns: 2fr 1fr
+  }
+}
+
+@media (max-width: 400px){
+  
+  .feed {
+    padding: 0.5rem;
+
+  }
 }
 
 

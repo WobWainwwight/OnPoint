@@ -75,10 +75,21 @@ const ArticleHead = (props) => {
   // each article head will render the image and title, and
   // it will be a link to the article page
   console.log("AHEad props", props)
-  const urlString = 'url(' + props.HeadImage + ')'
+  const urlString = props.HeadImage
+  // style = {
+  //   background: urlString,
+  //   height: 200px,
+  //   overflow: hidden,
+  //   box-shadow: 0 1px 5px rgba(104, 104, 104, 0.8),
+  //   padding: 3rem,
+  //   border-bottom: var(--acc-border),
+  // }
   return(
-    <div style={{background: urlString}}>
-      <Link to={`/article/${props.ArticleID}`}><h3>{props.Title}</h3></Link>
+    <div className='articleHeads'>
+      <Link to={`/article/${props.ArticleID}`}>
+        <img class='resize' src={urlString} alt=''/>
+        <h3>{props.Title}</h3>
+      </Link>
     </div>
   )
 }
