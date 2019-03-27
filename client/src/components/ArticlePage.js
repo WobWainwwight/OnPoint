@@ -73,11 +73,19 @@ const Article = (props) => {
         <img key={element.order} src={element.content} alt=''/>
     })
   return(
-    <div>
-      <img src={props.data.HeadImage} alt='Could not retrieve'/>
-      <h1>{props.data.Title}</h1>
-      <div>{articleBody}</div>
-
+    <div className='article'>
+      <div className='articleTop'>
+        <div className='article-title'>
+          <h1>{props.data.Title}</h1>
+        </div>
+        <div className='article-head-image'>
+          <img src={props.data.HeadImage} alt='Could not retrieve'/>
+        </div>
+      </div>
+      <div className='article-main'>
+        <div className='article-body'>{articleBody}</div>
+        <div/>  
+      </div>
     </div>
   )
 }

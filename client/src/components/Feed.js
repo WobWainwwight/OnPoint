@@ -76,14 +76,6 @@ const ArticleHead = (props) => {
   // it will be a link to the article page
   console.log("AHEad props", props)
   const urlString = props.HeadImage
-  // style = {
-  //   background: urlString,
-  //   height: 200px,
-  //   overflow: hidden,
-  //   box-shadow: 0 1px 5px rgba(104, 104, 104, 0.8),
-  //   padding: 3rem,
-  //   border-bottom: var(--acc-border),
-  // }
   return(
     <div className='articleHeads'>
       <Link to={`/article/${props.ArticleID}`}>
