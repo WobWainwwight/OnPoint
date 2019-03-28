@@ -11,6 +11,7 @@ export default class Signup extends React.Component{
         lastname: "",
         email: "",
         password: "",
+        secret: '',
       },
       accepted: false,
     }
@@ -32,7 +33,7 @@ export default class Signup extends React.Component{
     return false
   }
   handleSubmit(){
-    if(this.checkEmpty() === false){
+    if(this.checkEmpty() === false && this.state.secret === "10987"){
       //connect to backend
       this.signupToApi(this.state.formData)
       .then(res => {
@@ -111,6 +112,10 @@ export default class Signup extends React.Component{
         <input
           type="password"
           onChange={(e) => this.handleTyping(e.target.value,"password")}
+        />
+        <input
+          type="password"
+          onChange={(e) => this.handleTyping(e.target.value,"secret")}
         />
         <br/>
         <button onClick={() => this.handleSubmit()}>Submit</button>

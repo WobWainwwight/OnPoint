@@ -23,11 +23,15 @@ export default class ProfilePage extends React.Component {
   }
   render(){
     return(
-      <div>
+      <div className='profile'>
         <h1>{this.state.userInfo.firstname} {this.state.userInfo.lastname}</h1>
-        <ProfileBio bio = {this.state.userInfo.bio} id={this.state.userInfo.id}/>
-        <button><Link to={`/create-article/${this.state.userInfo.id}`}>Create Article</Link></button>
-        <button onClick={() => this.handleLogout()}>Logout <b>{this.state.userInfo.email}</b></button>
+        <div className='profile-body'>
+          <ProfileBio bio = {this.state.userInfo.bio} id={this.state.userInfo.id}/>
+          <div className='profile-actions'>
+            <button className='create-button'><Link to={`/create-article/${this.state.userInfo.id}`}>Create Article</Link></button>
+            <button className='logout-button' onClick={() => this.handleLogout()}>Logout <b>{this.state.userInfo.email}</b></button>
+          </div>
+        </div>
       </div>
     )
   }

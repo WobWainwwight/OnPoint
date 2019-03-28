@@ -74,8 +74,8 @@ export default class ProfileBio extends React.Component {
   render(){
     if(this.state.bio === '' && this.state.editing === false){
       return (
-        <div>
-          <label>Your Bio</label>
+        <div className='bio-section'>
+          <h4>Your Bio</h4>
           <p>-- Your bio is undefined, select 'Edit' below to add a bio --</p>
           <button onClick={() => this.handleEditClick()}>Edit</button>
         </div>
@@ -84,8 +84,8 @@ export default class ProfileBio extends React.Component {
     else {
       if(this.state.editing === false){
         return(
-          <div>
-            <label>Your Bio</label>
+          <div className='bio-section'>
+            <h4>Your Bio</h4>
             <p>{this.state.bio}</p>
             <button onClick={() => this.handleEditClick()}>Edit</button>
             <p>{this.state.message}</p>
@@ -94,8 +94,8 @@ export default class ProfileBio extends React.Component {
       }
       else{
         return(
-          <div>
-            <label>Your Bio</label>
+          <div className='bio-section'>
+            <h4>Your Bio</h4>
             <br/>
             <textarea
               cols="50"

@@ -79,7 +79,7 @@ const ArticleHead = (props) => {
   return(
     <div className='articleHeads'>
       <Link to={`/article/${props.ArticleID}`}>
-        <img class='resize' src={urlString} alt=''/>
+        <img className='resize' src={urlString} alt=''/>
         <h3>{props.Title}</h3>
       </Link>
     </div>

@@ -11,12 +11,14 @@ export default class LoginPage extends React.Component{
       accepted: false,
       message: 'Enter your Email and password',
       isAuthenticated: this.props.isAuthenticated,
+      secretNumber: ''
     }
     this.handleEmail = this.handleEmail.bind(this)
     this.handlePassword = this.handlePassword.bind(this)
     this.validate = this.validate.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.submitToAPI = this.submitToAPI.bind(this)
+    this.handleSecret = this.handleSecret.bind(this)
   }
   handleEmail(value){
     this.setState({
@@ -67,7 +69,7 @@ export default class LoginPage extends React.Component{
             this.setState({
               isAuthenticated: this.props.isAuthenticated
             })// reset to time once development is done
-          }, 0)
+          }, 1400)
         }
       })
       .catch(err => {
@@ -97,9 +99,14 @@ export default class LoginPage extends React.Component{
   }
   
   validate(){
-    if( this.state.enteredEmail.length > 0 && this.state.enteredPassword.length > 0 ){
+    if( this.state.enteredEmail.length > 0 && this.state.enteredPassword.length > 0 && this.state.secretNumber === '10987'){
       return true
     } else { return false }
+  }
+  handleSecret(value){
+    this.setState({
+      secretNumber: value
+    })
   }
 
   
@@ -110,7 +117,7 @@ export default class LoginPage extends React.Component{
       )
     }
     return(
-      <div>
+      <div className='login'>
         <h2>Login</h2>
         <input 
           type="text" 
@@ -123,9 +130,15 @@ export default class LoginPage extends React.Component{
           placeholder="Password" 
           onChange={(e) => this.handlePassword(e.target.value)}
         />
+        <input
+          type='password'
+          placeholder='secret code'
+          onChange={(e) => this.handleSecret(e.target.value)}
+        />
         <button onClick={() => this.handleSubmit()}>Submit</button>
         <h3>{this.state.message}</h3>
         
+        <p>or...</p>
         <Link to='/signup'>Sign Up!</Link>
       
       </div>

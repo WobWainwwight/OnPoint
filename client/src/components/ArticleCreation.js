@@ -219,18 +219,29 @@ export default class ArticleCreation extends React.Component{
       }
       if(this.state.submitted === false){
         return (
-          <div>
-            <input 
-              type='text'
-              placeholder='Enter title'
-              maxLength='100'
-              onChange={(e) => this.handleTitleChange(e.target.value)}
-            />
-            <UploadHeaderImg handleHeaderImg={this.handleHeaderImg} imgId={this.state.headerImgUrl} writerID={this.state.writerID} articleID={this.state.articleID}/>
-            <InputContent contentArr={this.state.inputContent} handleChangeParagraph={this.handleChangeParagraph}/>
-            <AddToContentButtons handleAddParagraph={this.handleAddParagraph} inputContent={this.state.inputContent} handleAddImg={this.handleAddImg} freeToAdd={this.state.freeToAdd}/>
-            <button onClick={() => this.handleSubmitArticle()}>Submit Article</button>
-            <p>{this.state.message}</p>
+          <div className='create-article-page'>
+            <div className='editor'>
+              <div className='title-entry'>
+                <h4>Title:  </h4>
+                <input 
+                  type='text'
+                  placeholder='Enter title'
+                  maxLength='100'
+                  onChange={(e) => this.handleTitleChange(e.target.value)}
+                />
+              </div>
+              <UploadHeaderImg handleHeaderImg={this.handleHeaderImg} imgId={this.state.headerImgUrl} writerID={this.state.writerID} articleID={this.state.articleID}/>
+              <InputContent contentArr={this.state.inputContent} handleChangeParagraph={this.handleChangeParagraph}/>
+              <AddToContentButtons handleAddParagraph={this.handleAddParagraph} inputContent={this.state.inputContent} handleAddImg={this.handleAddImg} freeToAdd={this.state.freeToAdd}/>
+              <button className='submit-art-button' onClick={() => this.handleSubmitArticle()}>Submit Article</button>
+              <p>{this.state.message}</p>
+            </div>
+            <div className='editor-help'>
+              <h4>Help</h4>
+              <p>Add images and paragraphs in the order that you'd like them to appear in your article.</p>
+              <p>Make sure to add at least a header image, a title and at least one paragraph.</p>
+              <p>Click 'Submit Article' to see a preview of how your article will look.</p>
+            </div>
           </div>
         )
       }
@@ -238,8 +249,11 @@ export default class ArticleCreation extends React.Component{
         return(
           <div>
             <MockArticle selectedTitle={this.state.selectedTitle} headerImgUrl={this.state.headerImgUrl} inputContent={this.state.inputContent}/>
-            <button onClick={() => this.setState({submitted:false})}>Edit</button>
-            <button onClick={() => this.publish()}>Publish</button>
+            <div className='ed-pub-buttons'> 
+              <button onClick={() => this.setState({submitted:false})}>Edit</button>
+              <button className='create-button' onClick={() => this.publish()}>Publish</button>
+            </div>
+            
             <p>{this.state.message}</p>
           </div>  
           
@@ -254,29 +268,34 @@ const UploadHeaderImg = (props) => {
   if(props.status === ''){
     label = "Add header image"
     return(
-      <div>
-        <label htmlFor='headImage'>{label}</label>
-        <input
-          type='file'
-          id='headImage'
-          accept="image/png, image/jpeg"
-          onChange={(e) => props.handleHeaderImg(e)}
-        />
+      <div className='head-image-entry'>
+        <div className='head-label-input'>
+          <label className='himg-label' htmlFor='headImage'>{label}</label>
+          <input
+            type='file'
+            id='headImage'
+            accept="image/png, image/jpeg"
+            onChange={(e) => props.handleHeaderImg(e)}
+          />
+        </div>
+        
       </div>
     )
   }
   else {
     label = "Change header"
     return(
-      <div>
+      <div className='head-image-entry'>
         <img src={props.imgId} alt={props.imgId}/>
-        <label htmlFor='headImage'>{label}</label>
-        <input
-          type='file'
-          id='headImage'
-          accept="image/png, image/jpeg"
-          onChange={(e) => props.handleHeaderImg(e)}
-        />
+        <div className='head-label-input'>
+          <label className='himg-label' htmlFor='headImage'>{label}</label>
+          <input
+            type='file'
+            id='headImage'
+            accept="image/png, image/jpeg"
+            onChange={(e) => props.handleHeaderImg(e)}
+          />
+        </div>
       </div>
     )
   }
@@ -292,7 +311,7 @@ const InputContent = (props) => {
   })
 
   return (
-    <div>
+    <div className='content-entry'>
       <ul>
         {textAreaList.map((element) => (
           <li key={element.key}>{element}</li>
@@ -305,13 +324,17 @@ const InputContent = (props) => {
 const AddImageButton = (props) => {
   if(props.inputContent.length > 0 && props.inputContent[props.inputContent.length-1].content !== ''){
     return(
-      <input
-        type='file'
-        id='image'
-        placeholder='Add image'
-        accept="image/png, image/jpeg"
-        onChange={(e) => props.handleAddImg(e)}
-      />
+      <div className='add-image'>
+        <label htmlFor='image'>Add Image</label>
+        <input
+          type='file'
+          id='image'
+          placeholder='Add Image'
+          accept="image/png, image/jpeg"
+          onChange={(e) => props.handleAddImg(e)}
+        />
+      </div>
+      
     )
   }       //return nothing
   else{return(<div></div>)}
@@ -320,7 +343,7 @@ const AddImageButton = (props) => {
 const AddToContentButtons = (props) => {
   if(props.freeToAdd === true){
     return(
-      <div>
+      <div className='add-buttons'>
         <button onClick={() => props.handleAddParagraph()}>Add Paragraph</button>
         <AddImageButton inputContent={props.inputContent} handleAddImg={props.handleAddImg}/>
       </div>
@@ -340,12 +363,21 @@ const MockArticle = (props) => {
       <img key={element.order} src={element.content} alt=''/>
   })
   return(
-    <div>
-      <img src={props.headerImgUrl} alt=''/>
-      <h1>{props.selectedTitle}</h1>
-      <div>
-        {articleBody}
+    <div className='article'>
+      <div className='articleTop'>
+        <div className='article-title'>
+          <h1>{props.selectedTitle}</h1>
+        </div>
+        <div className='article-head-image'>
+          <img src={props.headerImgUrl} alt=''/>
+        </div>
       </div>
+      <div className='article-main'>
+        <div className='article-body'>
+          {articleBody}
+        </div>
+      </div>
+      
       <h4>Words by {writerName}</h4>
       <p>{userInfo.bio}</p>
     </div>
