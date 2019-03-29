@@ -11,14 +11,15 @@ export default class Signup extends React.Component{
         lastname: "",
         email: "",
         password: "",
-        secret: '',
       },
       accepted: false,
+      secret: '',
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleTyping = this.handleTyping.bind(this)
     this.checkEmpty = this.checkEmpty.bind(this)
     this.signupToApi = this.signupToApi.bind(this)
+    this.handleSecret = this.handleSecret.bind(this)
   }
 
   checkEmpty(){
@@ -81,6 +82,11 @@ export default class Signup extends React.Component{
       formData: formObj,
     })
   }
+  handleSecret(value){
+    this.setState({
+      secret: value
+    })
+  }
   render(){
     if(this.state.accepted === true){
       return(
@@ -88,7 +94,7 @@ export default class Signup extends React.Component{
       )
     }
     return(
-      <div>
+      <div className='login'>
         <h1>Sign Up</h1>
         First Name: <br/>
         <input
@@ -115,10 +121,10 @@ export default class Signup extends React.Component{
         />
         <input
           type="password"
-          onChange={(e) => this.handleTyping(e.target.value,"secret")}
+          onChange={(e) => this.handleSecret(e.target.value,"secret")}
         />
         <br/>
-        <button onClick={() => this.handleSubmit()}>Submit</button>
+        <button className='create-button' onClick={() => this.handleSubmit()}>Submit</button>
         <h3>{this.state.message}</h3>
       </div>
     )

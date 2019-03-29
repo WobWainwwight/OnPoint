@@ -348,6 +348,57 @@ app.post('/get-article', (req,res,next) => {
 }
 )
 
+app.post('/check-token',(req,res, next) => {
+  // decrypt the token
+  console.log(req.body)
+  jwt.verify(req.body.token,process.env.JWT_SECRET,(err,decoded) => {
+    console.log(decoded)
+    // check that the things legit
+    if(decoded.id !== null){
+      res.body = { 
+        accepted: true,
+        id: decoded.id
+      }
+    }
+    else { res.body = { accepted: false}}
+    next()
+  })
+}, (req,res,next) => {
+  // login
+  console.log(req.body)
+  if(res.body.accepted === true){
+    // login 
+    const loginQuery = "SELECT * FROM Writers where WriterID = ?"
+    connection.query(loginQuery,[res.body.id],(err, result) => {
+      if(err) { res.body = { accepted: false }}
+      console.log("DB result"+ result)
+      console.log("DB result type" + typeof result)
+      if(result !== 'undefined'){
+        const userInfo = {
+          id: result[0].WriterID,
+          firstname: result[0].FirstName,
+          lastname: result[0].LastName,
+          email: result[0].Email,
+          bio: result[0].Bio,
+          articleCount: result[0].ArticleCount
+        }
+        console.log(userInfo)
+        res.body = {
+          accepted: true,
+          "OPuserInfo": userInfo,
+        }
+        next()
+      }
+      else {
+        res.body = { accepted: false}
+        next()
+      }
+      
+    })
+  }
+  
+}, (req,res) => res.json(res.body))
+
   
 
 

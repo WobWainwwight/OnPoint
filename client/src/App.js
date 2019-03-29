@@ -13,6 +13,7 @@ import Feed from "./components/Feed"
 import Signup from "./components/Signup"
 import ProfilePage from "./components/ProfilePage"
 import Article from "./components/ArticlePage"
+import getCookie from "./getCookie"
 
 // Onpoint will always have the header and the footer
 // So app will always render the header and footer components
@@ -25,8 +26,53 @@ export default class App extends Component {
       userInfo: null,
     }
     this.authenticate = this.authenticate.bind(this)
+    this.tokenToApi = this.tokenToApi.bind(this)
   }
-  
+  componentDidMount(){
+    //check for cookie
+    var cookies = getCookie()
+    console.log("Cookie",cookies)
+    if(cookies !== null){
+      // extract token from cookie
+      const regex = /OPtoken=([A-Za-z.\-_0-9]*)/
+      let match = cookies.match(regex)
+      if(match !== null){
+        console.log(match)
+        let token = match[1]
+        // send to API
+        const tokenObj = { token: token }
+        this.tokenToApi(tokenObj)
+        .then(res => {
+          if(res.accepted === true){
+            // set local storage
+            var userInfoString = JSON.stringify(res.OPuserInfo)
+            localStorage.setItem('OPuserInfo',userInfoString)
+            // authenticate
+            this.authenticate(true)
+          }
+        })
+      }
+      
+    }
+    
+  }
+
+  tokenToApi = async (tokenObj) => {
+    const response = await fetch('/check-token',{
+      method: 'POST',
+      headers: {
+        'Accept':'application/json, text/plain, */*',
+        'Content-type':'application/json'
+      },
+      body: JSON.stringify(tokenObj)
+    })
+    const body = await response.json()
+    // 200 is the http code signalling the request is successful
+    if (response.status !== 200){
+      throw Error(body.messsage)
+    } 
+    return body
+  } 
   // sets whether the user is authorised or not
   authenticate(trueOrFalse){
     if(trueOrFalse === true){
