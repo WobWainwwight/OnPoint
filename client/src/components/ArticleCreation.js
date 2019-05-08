@@ -119,6 +119,7 @@ export default class ArticleCreation extends React.Component{
     toSend.append('type','header')
     toSend.append('writerId',this.state.writerID)
     toSend.append('articleId',this.state.articleID) 
+    console.log('header obj to be sent is assembled')
     this.imgToAPI(toSend)
     .then((res) => {
       console.log(res)
@@ -142,7 +143,7 @@ export default class ArticleCreation extends React.Component{
     // 200 is the http code signalling the request is successful
     if (response.status !== 200){
       throw Error(body.messsage)
-    } 
+    }
     return body
   }
   handleSubmitArticle(){
@@ -221,11 +222,12 @@ export default class ArticleCreation extends React.Component{
         return (
           <div className='create-article-page'>
             <div className='editor'>
+              <div className='create-article-title'><h3>Create Article</h3></div>
               <div className='title-entry'>
-                <h4>Title:  </h4>
+                <h4>Article Title: </h4>
                 <input 
                   type='text'
-                  placeholder='Enter title'
+                  placeholder='Enter a title'
                   maxLength='100'
                   onChange={(e) => this.handleTitleChange(e.target.value)}
                 />
@@ -263,15 +265,17 @@ export default class ArticleCreation extends React.Component{
     }
 }
 
+
 const UploadHeaderImg = (props) => {
   var label
   if(props.status === ''){
-    label = "Add header image"
+    label = "Add header image:"
     return(
       <div className='head-image-entry'>
         <div className='head-label-input'>
-          <label className='himg-label' htmlFor='headImage'>{label}</label>
+          <h4 className='himg-label'>{label}</h4>
           <input
+            className='himg-adder'
             type='file'
             id='headImage'
             accept="image/png, image/jpeg"
@@ -283,13 +287,14 @@ const UploadHeaderImg = (props) => {
     )
   }
   else {
-    label = "Change header"
+    label = "Change header image:"
     return(
       <div className='head-image-entry'>
         <img src={props.imgId} alt={props.imgId}/>
         <div className='head-label-input'>
-          <label className='himg-label' htmlFor='headImage'>{label}</label>
+          <h4 className='himg-label'>{label}</h4>
           <input
+            className='himg-adder'
             type='file'
             id='headImage'
             accept="image/png, image/jpeg"

@@ -16,7 +16,7 @@ With fetch(), post requests take in two paramaters, a url and an object that you
 
 Almost there
 
-22/12/18 fucken smashed the whole POSTing palava, didn't use express body-parser for PARSING the res' BODY
+22/12/18 smashed the whole POSTing palava, didn't use express body-parser for PARSING the res' BODY
 
 NOW definitely worked out how to get stuff from DB
 
@@ -103,7 +103,7 @@ JWT - JSON Web Token -
   Decided to try deployment to try and work out how all that works
   https://facebook.github.io/create-react-app/docs/deployment <= useful resource - serving apps with client side routing
 
-  Fuck it, heroku is much easier, will just have to transfer the domain name
+  heroku is much easier, will just have to transfer the domain name
   
   Heroku wasnt much easier
   Going back to article creation

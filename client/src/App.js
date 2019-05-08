@@ -5,7 +5,7 @@ import {
   Link,
 } from "react-router-dom"
 import "./css/main.css"
-
+import logo from "./images/shouter-logo.svg"
 import ProtectedRoute from './ProtectedRoute'
 import ArticleCreation from "./components/ArticleCreation"
 import LoginPage from "./components/Login"
@@ -52,11 +52,8 @@ export default class App extends Component {
           }
         })
       }
-      
-    }
-    
+    }   
   }
-
   tokenToApi = async (tokenObj) => {
     const response = await fetch('/check-token',{
       method: 'POST',
@@ -91,8 +88,7 @@ export default class App extends Component {
       this.setState({
         isAuthenticated: false, 
       })
-    }
-    
+    }    
   }
   render() {
     return (
@@ -131,10 +127,9 @@ function Header (props) {
     return(
       <header className='header'>
         <ul>
-          <li><Link to ='/' style={{textDecoration:'none',color:'black'}}><h1>Shouter</h1></Link></li>
+          <li><Link to ='/' style={{textDecoration:'none',color:'black'}}><img src={logo} alt='Shouter'/></Link></li>
           <li className='loginButton'><Link to={`/profile/${props.userInfo.id}`}>{props.userInfo.firstname}</Link></li>
         </ul>
-        
       </header>        
     )
   }
@@ -143,15 +138,10 @@ function Header (props) {
       <header className='header'>
         <div></div>
         <ul>
-          <li><Link to ='/'style={{textDecoration:'none', color:'black'}}><h1>Shouter</h1></Link></li>
+          <li><Link to ='/'style={{textDecoration:'none', color:'black'}}><img src={logo} alt='Shouter'/></Link></li>
           <li className='loginButton'><Link to='/login'>Login</Link></li>
         </ul>
-        
       </header>   
     )
-  }
-  
+  }  
 }
-
-
-

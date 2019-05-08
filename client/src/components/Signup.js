@@ -119,6 +119,7 @@ export default class Signup extends React.Component{
           type="password"
           onChange={(e) => this.handleTyping(e.target.value,"password")}
         />
+        <br/>Secret Code = 10987<br/>
         <input
           type="password"
           onChange={(e) => this.handleSecret(e.target.value,"secret")}

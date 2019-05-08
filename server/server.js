@@ -244,7 +244,7 @@ app.post('/upload-img', async (req,res) => {
   
   // upload image to cloudinary
   try {
-    console.log("entered try catch")
+    console.log("entered cloudinary try catch")
     cloudinary.v2.uploader.upload(req.files.img.path, {
       folder: storedIn,
       public_id: imgName
@@ -262,7 +262,7 @@ app.post('/upload-img', async (req,res) => {
     })
   }
   catch(e){
-    console.log(error)
+    console.log(e)
     res.body = {
       "accepted": false
     }
@@ -273,8 +273,8 @@ app.post('/upload-img', async (req,res) => {
 app.post('/add-article', (req,res) => {
   console.log("Adding article", req.body)
   //New articles in DB should have writerid, content, headerimg url, title
-  res.body= {"madeit":"madeit"}
   const contentString = JSON.stringify(req.body.content)
+  console.log(contentString)
   const insertArticleQuery = "INSERT INTO Articles (WriterID, Title, Content, HeadImage) VALUES (?,?,?,?)"
   connection.query(insertArticleQuery,[req.body.writer_id,req.body.title,contentString,req.body.header_url],(err,result) => {
     if(err){

@@ -3,18 +3,18 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
     host : "localhost",
     user : "root",
-    password : process.env.MYSQL
+    password : "B3nd1g3d1g123"
 });
 
-connection.query("DROP DATABASE OnPoint", function(error,results){
-    if(error) throw error;
-    console.log("DB Dropped");
-});
+// connection.query("DROP DATABASE OnPoint", function(error,results){
+//     if(error) throw error;
+//     console.log("DB Dropped");
+// });
 
-connection.query("CREATE DATABASE OnPoint", function(error,results){
-    if(error) throw error;
-    console.log("OnPoint DB Created");
-});
+// connection.query("CREATE DATABASE OnPoint", function(error,results){
+//     if(error) throw error;
+//     console.log("OnPoint DB Created");
+// });
 
 connection.query("USE OnPoint", function(error,results){
     if(error) throw error;

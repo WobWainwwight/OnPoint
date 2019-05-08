@@ -96,6 +96,7 @@ export default class ProfileBio extends React.Component {
         return(
           <div className='bio-section'>
             <h4>Your Bio</h4>
+            <p>Click 'Submit' to save changes</p>
             <br/>
             <textarea
               cols="50"
@@ -104,6 +105,7 @@ export default class ProfileBio extends React.Component {
               value={this.state.bio} 
               onChange={(e) => this.handleBioChange(e.target.value)}
             />
+            <br/>
             <button onClick={() => this.handleBioSubmit()}>Submit</button>
           </div>
         )

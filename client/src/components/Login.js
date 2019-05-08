@@ -57,7 +57,10 @@ export default class LoginPage extends React.Component{
         if(this.state.accepted === true){
           // put JWT in cookie, first deleting an already existing one
           document.cookie = "OPtoken; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-          document.cookie = "OPtoken=" + res.OPtoken
+          // expiry date is set as one day later
+          var expiryDate = new Date()
+          expiryDate.setTime(expiryDate.getTime() + (24 * 60 * 60 * 1000))
+          document.cookie = "OPtoken=" + res.OPtoken + "; expires=" + expiryDate.toUTCString() + ";path=/"
           // store info in local storage
           console.log("res",res)
           console.log("USERINGo",res.OPuserInfo)
@@ -132,7 +135,7 @@ export default class LoginPage extends React.Component{
         />
         <input
           type='password'
-          placeholder='secret code'
+          placeholder='Secret code = 10987'
           onChange={(e) => this.handleSecret(e.target.value)}
         />
         <button onClick={() => this.handleSubmit()}>Submit</button>
